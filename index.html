@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypingTest</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cpath d='M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M18 13h.01M10 13h4M7 16h10'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo"><svg class="icon logo-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M18 13h.01M10 13h4M7 16h10"/></svg> Typing<span>Test</span></div>
+    <div id="userBadge" class="user-badge hidden"></div>
+  </header>
+
+  <main>
+    <!-- ===== Screen 1: Setup ===== -->
+    <section id="setupScreen" class="screen active">
+      <div class="card setup-card">
+        <h1>Typing Speed Test</h1>
+        <p class="sub">Check your typing speed and learn the correct finger technique</p>
+
+        <form id="setupForm">
+          <label class="field-label" for="nameInput">1. Enter your name</label>
+          <input id="nameInput" type="text" placeholder="Enter your name" maxlength="30" autocomplete="off" required>
+
+          <span class="field-label">2. Select language</span>
+          <div class="options lang-options" id="langOptions">
+            <button type="button" class="option selected" data-value="en">
+              <span class="opt-title">English</span>
+              <span class="opt-desc">QWERTY layout</span>
+            </button>
+            <button type="button" class="option" data-value="hi">
+              <span class="opt-title">Hindi</span>
+              <span class="opt-desc">Devanagari typing</span>
+            </button>
+          </div>
+
+          <span class="field-label">3. Select test type</span>
+          <div class="options" id="typeOptions">
+            <button type="button" class="option selected" data-value="alphabets">
+              <span class="opt-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18l5-12 5 12M4.7 14h6.6M16 10.5a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM19 10v8"/></svg></span>
+              <span class="opt-title">Alphabets</span>
+              <span class="opt-desc">Home row &amp; letter drills</span>
+            </button>
+            <button type="button" class="option" data-value="words">
+              <span class="opt-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h10M4 17h13"/></svg></span>
+              <span class="opt-title">Random Words</span>
+              <span class="opt-desc">Common everyday words</span>
+            </button>
+            <button type="button" class="option" data-value="paragraph">
+              <span class="opt-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6M9 9h2"/></svg></span>
+              <span class="opt-title">Paragraph</span>
+              <span class="opt-desc">Sentences with punctuation</span>
+            </button>
+          </div>
+
+          <span class="field-label">4. Select time</span>
+          <div class="options time-options" id="timeOptions">
+            <button type="button" class="option selected" data-value="1">1 min</button>
+            <button type="button" class="option" data-value="3">3 min</button>
+            <button type="button" class="option" data-value="5">5 min</button>
+            <button type="button" class="option" data-value="10">10 min</button>
+          </div>
+
+          <button type="submit" class="btn primary big">Start Test <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== Screen 2: Test ===== -->
+    <section id="testScreen" class="screen">
+      <div class="stats-bar">
+        <div class="stat"><span class="stat-label">Time Left</span><span id="timeLeft" class="stat-value">1:00</span></div>
+        <div class="stat"><span class="stat-label">WPM</span><span id="liveWpm" class="stat-value">0</span></div>
+        <div class="stat"><span class="stat-label">Accuracy</span><span id="liveAcc" class="stat-value">100%</span></div>
+        <div class="stat"><span class="stat-label">Errors</span><span id="liveErr" class="stat-value">0</span></div>
+      </div>
+
+      <div class="card text-card">
+        <div id="startHint" class="start-hint">The timer starts as soon as you begin typing</div>
+        <div id="textBox" class="text-box" tabindex="0"></div>
+        <input id="mobileInput" class="mobile-input" type="text" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+
+      <div class="finger-hint" id="fingerHint">
+        Next key: <kbd id="nextKey">-</kbd> <span id="nextGlyph" class="hindi next-glyph hidden"></span> &nbsp;use <strong id="nextFinger">-</strong>
+      </div>
+
+      <div class="keyboard-wrap">
+        <div id="keyboard" class="keyboard"></div>
+        <div class="legend">
+          <span><i class="f-lp"></i>Pinky</span>
+          <span><i class="f-lr"></i>Ring</span>
+          <span><i class="f-lm"></i>Middle</span>
+          <span><i class="f-li"></i>Left Index</span>
+          <span><i class="f-ri"></i>Right Index</span>
+          <span><i class="f-th"></i>Thumb</span>
+        </div>
+      </div>
+
+      <div class="test-actions">
+        <button id="restartBtn" class="btn"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg> Restart</button>
+        <button id="finishBtn" class="btn primary">Finish Test</button>
+      </div>
+    </section>
+
+    <!-- ===== Screen 3: Result ===== -->
+    <section id="resultScreen" class="screen">
+      <div class="card result-card">
+        <h2 id="resultTitle">Result</h2>
+        <p id="resultMeta" class="sub"></p>
+
+        <div class="result-main">
+          <div class="wpm-circle">
+            <span id="resWpm">0</span>
+            <small>Net WPM</small>
+          </div>
+          <div class="result-grid">
+            <div><span class="stat-label">Gross WPM</span><span id="resGross" class="stat-value">0</span></div>
+            <div><span class="stat-label">Accuracy</span><span id="resAcc" class="stat-value">0%</span></div>
+            <div><span class="stat-label">Correct Chars</span><span id="resCorrect" class="stat-value">0</span></div>
+            <div><span class="stat-label">Wrong Chars</span><span id="resWrong" class="stat-value">0</span></div>
+            <div><span class="stat-label">Total Keystrokes</span><span id="resKeys" class="stat-value">0</span></div>
+            <div><span class="stat-label">Time</span><span id="resTime" class="stat-value">0</span></div>
+          </div>
+        </div>
+
+        <div id="levelBox" class="level-box"></div>
+
+        <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg> Mistyped keys &amp; correct finger</h3>
+        <div id="weakKeys" class="weak-keys"></div>
+
+        <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg> Suggestions</h3>
+        <ul id="tipsList" class="tips"></ul>
+
+        <div class="result-actions">
+          <button id="retryBtn" class="btn primary">Try Again</button>
+          <button id="newTestBtn" class="btn">New Test</button>
+          <button id="printBtn" class="btn" title="Print certificate">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/><path d="M17 12h.01"/></svg>
+            Print Certificate
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Certificate (only visible when printing) ===== -->
+  <div id="certificate" class="certificate">
+    <div class="cert-inner">
+      <div class="cert-brand">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M18 13h.01M10 13h4M7 16h10"/></svg>
+        Typing<span>Test</span>
+      </div>
+      <h1 class="cert-title">Certificate of Achievement</h1>
+      <p class="cert-sub">This certificate is proudly presented to</p>
+      <p id="certName" class="cert-name"></p>
+      <p id="certText" class="cert-text"></p>
+
+      <div class="cert-stats">
+        <div><span id="certWpm"></span><small>Net WPM</small></div>
+        <div><span id="certAcc"></span><small>Accuracy</small></div>
+        <div><span id="certGross"></span><small>Gross WPM</small></div>
+        <div><span id="certLevel"></span><small>Level</small></div>
+      </div>
+
+      <div class="cert-footer">
+        <div><span id="certDate"></span><small>Date</small></div>
+        <div class="cert-seal">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M9 14.5L7.5 22l4.5-2.5 4.5 2.5-1.5-7.5"/><path d="M9.5 9l1.8 1.8L14.5 7.5"/></svg>
+        </div>
+        <div><span id="certId"></span><small>Certificate No.</small></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/hindi.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
