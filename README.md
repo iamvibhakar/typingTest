@@ -4,6 +4,8 @@ A lightweight typing speed test that runs entirely in the browser. Pick a langua
 
 Built with plain **HTML, CSS and JavaScript** — no frameworks, no build step, no internet connection needed.
 
+**Live demo:** https://iamvibhakar.github.io/typingTest/
+
 ![Setup screen](assets/screenshots/setup.png)
 
 ## Features
