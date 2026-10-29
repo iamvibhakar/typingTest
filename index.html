@@ -109,8 +109,20 @@
     <!-- ===== Screen 3: Result ===== -->
     <section id="resultScreen" class="screen">
       <div class="card result-card">
-        <h2 id="resultTitle">Result</h2>
-        <p id="resultMeta" class="sub"></p>
+        <div class="result-head">
+          <div>
+            <h2 id="resultTitle">Result</h2>
+            <p id="resultMeta" class="sub"></p>
+          </div>
+          <div class="result-actions">
+            <button id="retryBtn" class="btn primary">Try Again</button>
+            <button id="newTestBtn" class="btn">New Test</button>
+            <button id="printBtn" class="btn" title="Print certificate">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/><path d="M17 12h.01"/></svg>
+              Print Certificate
+            </button>
+          </div>
+        </div>
 
         <div class="result-main">
           <div class="wpm-circle">
@@ -122,26 +134,21 @@
             <div><span class="stat-label">Accuracy</span><span id="resAcc" class="stat-value">0%</span></div>
             <div><span class="stat-label">Correct Chars</span><span id="resCorrect" class="stat-value">0</span></div>
             <div><span class="stat-label">Wrong Chars</span><span id="resWrong" class="stat-value">0</span></div>
-            <div><span class="stat-label">Total Keystrokes</span><span id="resKeys" class="stat-value">0</span></div>
+            <div><span class="stat-label">Keystrokes</span><span id="resKeys" class="stat-value">0</span></div>
             <div><span class="stat-label">Time</span><span id="resTime" class="stat-value">0</span></div>
           </div>
+          <div id="levelBox" class="level-box"></div>
         </div>
 
-        <div id="levelBox" class="level-box"></div>
-
-        <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg> Mistyped keys &amp; correct finger</h3>
-        <div id="weakKeys" class="weak-keys"></div>
-
-        <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg> Suggestions</h3>
-        <ul id="tipsList" class="tips"></ul>
-
-        <div class="result-actions">
-          <button id="retryBtn" class="btn primary">Try Again</button>
-          <button id="newTestBtn" class="btn">New Test</button>
-          <button id="printBtn" class="btn" title="Print certificate">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/><path d="M17 12h.01"/></svg>
-            Print Certificate
-          </button>
+        <div class="result-panels">
+          <div class="panel">
+            <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg> Mistyped keys &amp; correct finger</h3>
+            <div id="weakKeys" class="weak-keys"></div>
+          </div>
+          <div class="panel">
+            <h3><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg> Suggestions</h3>
+            <ul id="tipsList" class="tips"></ul>
+          </div>
         </div>
       </div>
     </section>

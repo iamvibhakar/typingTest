@@ -461,7 +461,7 @@ function renderLevel(s) {
 
 function renderWeakKeys() {
   const box = $("weakKeys");
-  const entries = Object.entries(state.mistakes).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  const entries = Object.entries(state.mistakes).sort((a, b) => b[1] - a[1]).slice(0, 6);
   if (!entries.length) {
     box.innerHTML = `<p class="no-errors"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg> No mistakes! You typed every key correctly.</p>`;
     return;
@@ -501,24 +501,10 @@ function rowHint(key) {
   return `Reach up from ${homeKey} to the number row, then return to ${homeKey}.`;
 }
 
+// Most relevant tips first; only the top 5 are shown so the result fits on one screen
 function renderTips(s) {
   const tips = [];
-  if (s.accuracy < 90) tips.push("Your accuracy is below 90% — slow down. Be accurate first, speed will follow.");
-  if (s.accuracy >= 95 && s.net < 40) tips.push("Your accuracy is good — now try to push your speed a little.");
-  tips.push("Keep your fingers on the home row: left hand on A S D F, right hand on J K L ;. Feel the small bumps on F and J without looking.");
-  tips.push("Don't look at the keyboard — keep your eyes on the screen (touch typing).");
-  tips.push("Return your finger to the home row after every key press.");
-  if (state.lang === "hi") {
-    tips.push("In Hindi typing, the ि matra is typed first (F key), before the letter — e.g. कि = F then D.");
-    tips.push("Half letters use Shift — e.g. Shift + D gives क्, Shift + L gives स्.");
-    tips.push("The full stop । is Shift + A, and the comma is the ] key.");
-    tips.push("The reph (र् on top, as in धर्म) is typed with Shift + Z after the letter and its matra — धर्म = / K E Shift+Z.");
-  } else {
-    tips.push("For capital letters, use the Shift key on the opposite hand (e.g. Right Shift for 'A').");
-  }
-  tips.push("Press the Space bar with your thumb and don't rest your wrists on the keyboard.");
-
-  const weak = Object.entries(state.mistakes).sort((a, b) => b[1] - a[1]);
+  const weak = Object.entries(state.mistakes);
   if (weak.length) {
     const fingerCount = {};
     weak.forEach(([ch, c]) => {
@@ -526,12 +512,24 @@ function renderTips(s) {
       if (f) fingerCount[f] = (fingerCount[f] || 0) + c;
     });
     const worst = Object.entries(fingerCount).sort((a, b) => b[1] - a[1])[0];
-    if (worst) tips.unshift(`Most of your mistakes were on <b>${FINGERS[worst[0]]}</b> keys — practice those keys separately.`);
+    if (worst) tips.push(`Most of your mistakes were on <b>${FINGERS[worst[0]]}</b> keys — practice those keys separately.`);
   }
+  if (s.accuracy < 90) tips.push("Your accuracy is below 90% — slow down. Be accurate first, speed will follow.");
+  if (s.accuracy >= 95 && s.net < 40) tips.push("Your accuracy is good — now try to push your speed a little.");
   if (state.type === "alphabets" && s.accuracy >= 90) tips.push("Nice work on Alphabets — try the 'Random Words' test next.");
   if (state.type === "words" && s.accuracy >= 90) tips.push("Nice work on Words — try the 'Paragraph' test to practice punctuation.");
+  if (state.lang === "hi") {
+    tips.push("Type the ि matra first (F key), before the letter — e.g. कि = F then D.");
+    tips.push("Half letters use Shift — Shift + D gives क्, Shift + L gives स्. The full stop । is Shift + A.");
+    tips.push("Reph (र् on top) is Shift + Z after the letter and its matra — धर्म = / K E Shift+Z.");
+  } else {
+    tips.push("For capital letters, use the Shift key on the opposite hand (e.g. Right Shift for 'A').");
+  }
+  tips.push("Keep your fingers on the home row (A S D F and J K L ;) and return to it after every key.");
+  tips.push("Don't look at the keyboard — keep your eyes on the screen.");
+  tips.push("Press the Space bar with your thumb and don't rest your wrists on the keyboard.");
 
-  $("tipsList").innerHTML = tips.map((t) => `<li>${t}</li>`).join("");
+  $("tipsList").innerHTML = tips.slice(0, 5).map((t) => `<li>${t}</li>`).join("");
 }
 
 function escapeHtml(str) {
